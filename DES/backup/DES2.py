@@ -210,12 +210,20 @@ def DES(key, text, e_or_d):
         return out
 
     # xor two equal length strings
-    def xor_mat(a, b):
+    def xor_mat_str(a, b):
         a_cpy = np.copy(a)
         b_cpy = np.copy(b)
-        out = np.bitwise_xor(a_cpy, b_cpy)
+        # a_cpy = np.reshape(a_cpy,(np.shape(a_cpy)[0] * np.shape(a_cpy)[1],1)).T
+        # b_cpy = np.reshape(b_cpy, (np.shape(b_cpy)[0] * np.shape(b_cpy)[1], 1)).T
+        # a_ls = list(a_cpy)
+        # b_ls = list(b_cpy)
+        # a_str = ''.join(a_ls[0])
+        # b_str = ''.join(b_ls[0])
+        # out = ""
+        # for i in range(len(a_str)):
+        #     out = out + str(int(a_str[i]) ^ int(b_str[i]))
+        out = np.bitwise_xor(a_cpy,b_cpy)
         return out
-
     ####################################################################################################################
     # Key Generation
     def k_generation(input_key_hex):
@@ -294,9 +302,8 @@ def DES(key, text, e_or_d):
             print("expansion result\n", right_txt_exp)
 
             # xor round key with right text expanded
-            right_xor_key_result = xor_mat(round_keys[i], right_txt_exp)
+            right_xor_key_result = xor_mat_str(round_keys[i],right_txt_exp)
             print("xor result\n", right_xor_key_result)
-
     encrypt(key, text)
 
 
