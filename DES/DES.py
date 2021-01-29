@@ -192,11 +192,11 @@ def DES(key, text, e_or_d):
     def permutation_box(txt_arr, perm_arr):
         txt_arr_cpy = np.copy(txt_arr)
         txt_arr_cpy = np.reshape(txt_arr_cpy, (np.shape(txt_arr_cpy)[0] * np.shape(txt_arr_cpy)[1], 1))
-        n_txt = np.zeros_like(txt_arr_cpy)
-        for i, val in enumerate(txt_arr_cpy):
+        n_txt = np.zeros_like(perm_arr)
+        for i in range(len(perm_arr)):
             n_txt[i] = txt_arr_cpy[perm_arr[i] - 1]
 
-        n_txt = np.reshape(n_txt, np.shape(txt_arr))
+        n_txt = np.reshape(n_txt, (np.shape(txt_arr)[0], -1))
         return n_txt
 
     # shift left function
@@ -216,9 +216,25 @@ def DES(key, text, e_or_d):
             out = out + str(int(a[i]) ^ int(b[i]))
 
     ####################################################################################################################
+    # Key Generation
+    def k_generation(input_key_hex):
+        # convert hex key and plain text to bin
+        key_bin = np.chararray((64, 1))
+        for i in range(64):
+            key_bin[i] = list(hex_to_bin(input_key_hex))[i]
+        key_bin = key_bin.decode()
+        print(key_bin)
 
+        # first permutation 56 bits to 64 bits
+        key_bin = np.reshape(key_bin, (8, 8))
+        key_bin = permutation_box(key_bin, parity_drop)
+        print(key_bin)
+
+    k_generation(key)
+
+    ####################################################################################################################
     # Encryption Algorithm
-    def encrypt(key,text):
+    def encrypt(round_keys, text):
         # convert hex key and plain text to bin
         txt_bin = np.chararray((64, 1))
         key_bin = np.chararray((64, 1))
