@@ -188,7 +188,34 @@ def DES(key, text, e_or_d):
             hex_str = hex_str + dic2[chr]
         return hex_str
 
-    # permute function
+    # convert binary to decimal
+    def bin_to_dec(binary):
+
+        binary1 = binary
+        decimal, i, n = 0, 0, 0
+        while (binary != 0):
+            dec = binary % 10
+            decimal = decimal + dec * pow(2, i)
+            binary = binary // 10
+            i += 1
+        return decimal
+
+        # Decimal to binary conversion
+
+    # convert decimal to binary
+    def dec_to_bin(num):
+        res = bin(num).replace("0b", "")
+        if len(res) % 4 != 0:
+            div = len(res) / 4
+            div = int(div)
+            counter = (4 * (div + 1)) - len(res)
+            for i in range(0, counter):
+                res = '0' + res
+            bin = res
+        return bin
+
+        # permute function
+
     def permutation_box(txt_arr, perm_arr):
         txt_arr_cpy = np.copy(txt_arr)
         txt_arr_cpy = np.reshape(txt_arr_cpy, (np.shape(txt_arr_cpy)[0] * np.shape(txt_arr_cpy)[1], 1))
@@ -296,6 +323,8 @@ def DES(key, text, e_or_d):
             # xor round key with right text expanded
             right_xor_key_result = xor_mat(round_keys[i], right_txt_exp)
             print("xor result\n", right_xor_key_result)
+
+            # s-box
 
     encrypt(key, text)
 
