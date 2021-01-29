@@ -86,6 +86,32 @@ def DES(key, text, e_or_d):
                   34, 2, 42, 10, 50, 18, 58, 26,
                   33, 1, 41, 9, 49, 17, 57, 25]
 
+    # Parity bits drop table
+    parity_drop = [57, 49, 41, 33, 25, 17, 9,
+                   1, 58, 50, 42, 34, 26, 18,
+                   10, 2, 59, 51, 43, 35, 27,
+                   19, 11, 3, 60, 52, 44, 36,
+                   63, 55, 47, 39, 31, 23, 15,
+                   7, 62, 54, 46, 38, 30, 22,
+                   14, 6, 61, 53, 45, 37, 29,
+                   21, 13, 5, 28, 20, 12, 4]
+
+    # Number of bit shifts
+    shift_table = [1, 1, 2, 2,
+                   2, 2, 2, 2,
+                   1, 2, 2, 2,
+                   2, 2, 2, 1]
+
+    # Key Compression Table  (key 56 bits to 48 bits)
+    k_compression_table = [14, 17, 11, 24, 1, 5,
+                           3, 28, 15, 6, 21, 10,
+                           23, 19, 12, 4, 26, 8,
+                           16, 7, 27, 20, 13, 2,
+                           41, 52, 31, 37, 47, 55,
+                           30, 40, 51, 45, 33, 48,
+                           44, 49, 39, 56, 34, 53,
+                           46, 42, 50, 36, 29, 32]
+
     initial_perm = np.array(initial_perm)
     initial_perm = np.reshape(initial_perm, (np.shape(initial_perm)[0], 1))
 
@@ -99,6 +125,15 @@ def DES(key, text, e_or_d):
 
     final_perm = np.array(final_perm)
     final_perm = np.reshape(final_perm, (np.shape(final_perm)[0], 1))
+
+    parity_drop = np.array(parity_drop)
+    parity_drop = np.reshape(parity_drop, (np.shape(parity_drop)[0], 1))
+
+    shift_table = np.array(shift_table)
+    shift_table = np.reshape(shift_table, (np.shape(shift_table)[0], 1))
+
+    k_compression_table = np.array(k_compression_table)
+    k_compression_table = np.reshape(k_compression_table, (np.shape(k_compression_table)[0], 1))
 
     ####################################################################################################################
 
@@ -183,23 +218,22 @@ def DES(key, text, e_or_d):
     ####################################################################################################################
 
     # Encryption Algorithm
+    def encrypt(key,text):
+        # convert hex key and plain text to bin
+        txt_bin = np.chararray((64, 1))
+        key_bin = np.chararray((64, 1))
+        for i in range(64):
+            txt_bin[i] = list(hex_to_bin(text))[i]
+            key_bin[i] = list(hex_to_bin(key))[i]
 
-    # convert hex key and plain text to bin
-    txt_bin = np.chararray((64, 1))
-    key_bin = np.chararray((64, 1))
-    for i in range(64):
-        txt_bin[i] = list(hex_to_bin(text))[i]
-        key_bin[i] = list(hex_to_bin(key))[i]
+        txt_bin = np.reshape(txt_bin, (8, 8)).decode()
+        key_bin = np.reshape(key_bin, (8, 8)).decode()
 
-    txt_bin = np.reshape(txt_bin, (8, 8)).decode()
-    key_bin = np.reshape(key_bin, (8, 8)).decode()
+        # initial text permuation
+        txt_bin = permutation_box(txt_bin, initial_perm)
 
-    # initial text permuation
-    txt_bin = permutation_box(txt_bin, initial_perm)
-
-    # remove 8th element from each column in key to get 56 bits
-    key_bin = key_bin[:, 0:7]
-
+        # remove 8th element from each column in key to get 56 bits
+        key_bin = key_bin[:, 0:7]
 
 
 ########################################################################################################################
