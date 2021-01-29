@@ -4,6 +4,7 @@ from bitarray import *
 
 
 def DES(key, text, e_or_d):
+    ####################################################################################################################
     # Tables
 
     # Initial Permutation Table
@@ -99,6 +100,8 @@ def DES(key, text, e_or_d):
     final_perm = np.array(final_perm)
     final_perm = np.reshape(final_perm, (np.shape(final_perm)[0], 1))
 
+    ####################################################################################################################
+
     # Functions
 
     # convert hex to binary
@@ -171,7 +174,15 @@ def DES(key, text, e_or_d):
         out = np.reshape(out, np.shape(arr))
         return out
 
-    # Algorithm
+    # xor two equal length strings
+    def xor_str(a, b):
+        out = ""
+        for i in range(len(a)):
+            out = out + str(int(a[i]) ^ int(b[i]))
+
+    ####################################################################################################################
+
+    # Encryption Algorithm
 
     # convert hex key and plain text to bin
     txt_bin = np.chararray((64, 1))
@@ -190,5 +201,7 @@ def DES(key, text, e_or_d):
     key_bin = key_bin[:, 0:7]
 
 
+
+########################################################################################################################
 # testing
 DES("0123456789ABCDEF", "0123456789ABCDEF", "e")
