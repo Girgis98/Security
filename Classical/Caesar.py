@@ -1,4 +1,4 @@
-def caesar(text, e_or_d, key):
+def caesar(text, key, e_or_d='e'):
     text = text.lower()
     text = text.replace(" ", "")
     out = ""
@@ -30,10 +30,10 @@ def caesar(text, e_or_d, key):
 lista = []
 ok = True
 for i in range (-1000,1000):
-    out = Caesar("abcdefghijklmnopqrstuvwxyz", "E", i)
+    out = Caesar("abcdefghijklmnopqrstuvwxyz", i)
 
    # print(out)
-    out = Caesar(out, "D", i)
+    out = Caesar(out,i,"d")
     lista.append(out)
     print(out)
 for i in range(len(lista)-1):

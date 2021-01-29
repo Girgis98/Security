@@ -2,7 +2,7 @@ import numpy as np
 from math import *
 
 
-def play_fair(text, e_or_d, key):
+def play_fair(text, key):
     dic2 = {
         "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7, "i": 8, "k": 9, "l": 10,
         "m": 11, "n": 12, "o": 13, "p": 14, "q": 15, "r": 16, "s": 17, "t": 18, "u": 19, "v": 20, "w": 21, "x": 22,
@@ -49,30 +49,68 @@ def play_fair(text, e_or_d, key):
         text = text + 'x'
 
     # 5x5 matrix creation
-    mat = np.chararray((5, 5))
-    key_itr = 0
-    last_i = 0
-    last_j = 0
-    for i in range(ceil(len(key) / 5)):
-        for j in range(5):
-            if key[key_itr] in dic_cpy.keys():
-                mat[i][j] = key[key_itr]
-                dic_cpy.pop(key[key_itr])
-            key_itr += 1
-            last_j = j
-            last_i = i
-            if key_itr == len(key):
+    mat = np.chararray((25, 1))
+
+    mat_itr = 0
+    for i in range((len(key))):
+        if key[i] in dic_cpy.keys():
+            mat[mat_itr] = key[i]
+            dic_cpy.pop(key[i])
+            mat_itr += 1
+
+    for i, ele in enumerate(dic_cpy):
+        if list(dic_cpy.keys())[i] in dic_cpy.keys():
+            mat[mat_itr] = list(dic_cpy.keys())[i]
+            mat_itr += 1
+
+    mat = mat.decode('utf-8')
+    mat = np.reshape(mat, (5, 5))
+
+    # print(mat)
+
+    def get_position(char, mat_c):
+        mat_cpy = np.copy(mat_c)
+        mat_cpy = np.reshape(mat_cpy, (25, 1))
+
+        for i, val in enumerate(mat_cpy):
+            if char == val:
+                pos = i
                 break
+        pos_x = pos % 5
+        pos_y = floor(pos / 5)
+        return pos_x, pos_y
 
-    dic_itr = 0
-    for i in range(ceil(len(dic_cpy) / 5)):
-        for j in range(5):
-            if list(dic_cpy.keys())[dic_itr] in dic_cpy.keys():
-                mat[i][j] = list(dic_cpy.keys())[dic_itr]
-                dic_cpy.pop(list(dic_cpy.keys())[dic_itr])
-            dic_itr += 1
-            if dic_itr == len(dic_cpy):
-                break
+    # test get position
+    '''
+    for i, val in enumerate(np.reshape(mat, (25, 1))):
+        x, y = get_position(val, mat)
+        print(x, y)
+    '''
+    out = ""
+    for i in range(0, len(text) - 1, 2):
+        pos_x_i, pos_y_i = get_position(text[i], mat)
+        pos_x_i_p, pos_y_i_p = get_position(text[i + 1], mat)
+
+        if pos_y_i == pos_y_i_p:
+            out = out + mat[pos_y_i][(pos_x_i + 1) % 5]
+            out = out + mat[pos_y_i_p][(pos_x_i_p + 1) % 5]
+        elif pos_x_i == pos_x_i_p:
+            out = out + mat[(pos_y_i + 1) % 5][pos_x_i]
+            out = out + mat[(pos_y_i_p + 1) % 5][pos_x_i_p]
+        else:
+            out = out + mat[pos_y_i][pos_x_i_p]
+            out = out + mat[pos_y_i_p][pos_x_i]
+    return out
 
 
-play_fair("my name is Gargosaaa mamdouhe", "e", "eeeeeeeee")
+
+
+
+
+
+# testing
+''
+o = play_fair("hello world", "charles")
+print(o)
+''
+
