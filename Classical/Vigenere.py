@@ -23,9 +23,9 @@ def Vigenere(text, key, mode):  # mode : true auto , false repeating
     key = key.replace(" ", "")
 
     # complete key
-    for i, val in enumerate(text):
+    for i in range(len(text)-len(key)):
         if mode:       # auto
-            key = key + val
+            key = key + text[i]
         elif not mode:  # repeat
             key = key + key[i]
 
@@ -51,7 +51,7 @@ def Vigenere(text, key, mode):  # mode : true auto , false repeating
 
 # testing
 '''
-out = Vigenere("we are discovered save yourself" , "deceptive" , True)
+out = Vigenere("we are discovered save yourself" , "deceptive" , False)
 print(out)
 '''
 
