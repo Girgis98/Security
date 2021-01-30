@@ -339,8 +339,8 @@ def DES(key, text, e_or_d):
             right_sbox_ls = list(sbox_str)
             right_sbox_res_mat = np.chararray((len(right_sbox_ls), 1))
 
-            for i in range(len(right_sbox_ls)):
-                right_sbox_res_mat[i] = right_sbox_ls[i]
+            for l in range(len(right_sbox_ls)):
+                right_sbox_res_mat[l] = right_sbox_ls[l]
             right_sbox_res_mat = right_sbox_res_mat.decode().astype(int)
             right_sbox_res_mat = np.reshape(right_sbox_res_mat, (8, 4))
             print("\ns-box\n", right_sbox_res_mat)
@@ -350,16 +350,27 @@ def DES(key, text, e_or_d):
             right_perm = right_perm.T
 
             # xor left txt and right perm
+            # left_txt_cpy = np.copy(left_txt).T
             left_txt = xor_mat(left_txt, right_perm)
 
             # swap left and right
             if (i != 15):
                 left_txt, right_txt = right_txt, left_txt
-                print("\nleft:\n",left_txt,"\nright:\n",right_txt)
+                print("\nleft:\n", left_txt, "\nright:\n", right_txt)
+        # combine
+        combine = np.concatenate((left_txt, right_txt))
+
+        # final permutation
+        cipher_txt = permutation_box(combine, final_perm)
+        c = cipher_txt.flatten()
+        s = str(c).replace(" ", "").replace("\n", "").replace("[", "").replace("]", "")
+        cipher_txt_hex = bin_to_hex(s)
+        print("\ncipher text:\n", bin_to_hex(s))
+        return cipher_txt, cipher_txt_hex
 
     encrypt(key, text)
 
 
 ########################################################################################################################
 # testing
-DES("0123456789ABCDEF", "0123456789ABCDEF", "e")
+DES("133457799BBCDFF1", "0123456789ABCDEF", "e")
