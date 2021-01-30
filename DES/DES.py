@@ -25,7 +25,7 @@ def DES(key, text, e_or_d):
                        22, 23, 24, 25, 24, 25, 26, 27,
                        28, 29, 28, 29, 30, 31, 32, 1]
 
-    # Straight Permutaion Table
+    # Straight Permutation Table
     per = [16, 7, 20, 21,
            29, 12, 28, 17,
            1, 15, 23, 26,
@@ -211,8 +211,7 @@ def DES(key, text, e_or_d):
             counter = (4 * (div + 1)) - len(res)
             for i in range(0, counter):
                 res = '0' + res
-            bin = res
-        return bin
+        return res
 
         # permute function
 
@@ -274,7 +273,7 @@ def DES(key, text, e_or_d):
             # print(left_k)
             # print(right_k)
 
-            # combine upper and lower parts
+            # combine left and right parts
             combined_k = np.concatenate((left_k, right_k))
             # print("combined")
             # print(combined_k)
@@ -325,6 +324,38 @@ def DES(key, text, e_or_d):
             print("xor result\n", right_xor_key_result)
 
             # s-box
+            sbox_str = ""
+            right_xor_key_result_cpy = np.copy(right_xor_key_result)
+            right_xor_key_result_cpy = np.reshape(right_xor_key_result_cpy, (
+                np.shape(right_xor_key_result_cpy)[0] * np.shape(right_xor_key_result_cpy)[1], 1))
+            for j in range(8):
+                row = bin_to_dec(
+                    int(str(right_xor_key_result_cpy[j * 6][0]) + str(right_xor_key_result_cpy[j * 6 + 5][0])))
+                col = bin_to_dec(
+                    int(str(right_xor_key_result_cpy[j * 6 + 1][0]) + str(right_xor_key_result_cpy[j * 6 + 2][0]) +
+                        str(right_xor_key_result_cpy[j * 6 + 3][0]) + str(right_xor_key_result_cpy[j * 6 + 4][0])))
+                val = sbox[j][int(row)][int(col)]
+                sbox_str = sbox_str + dec_to_bin(val)
+            right_sbox_ls = list(sbox_str)
+            right_sbox_res_mat = np.chararray((len(right_sbox_ls), 1))
+
+            for i in range(len(right_sbox_ls)):
+                right_sbox_res_mat[i] = right_sbox_ls[i]
+            right_sbox_res_mat = right_sbox_res_mat.decode().astype(int)
+            right_sbox_res_mat = np.reshape(right_sbox_res_mat, (8, 4))
+            print("\ns-box\n", right_sbox_res_mat)
+
+            # permutation
+            right_perm = permutation_box(right_sbox_res_mat, per)
+            right_perm = right_perm.T
+
+            # xor left txt and right perm
+            left_txt = xor_mat(left_txt, right_perm)
+
+            # swap left and right
+            if (i != 15):
+                left_txt, right_txt = right_txt, left_txt
+                print("\nleft:\n",left_txt,"\nright:\n",right_txt)
 
     encrypt(key, text)
 

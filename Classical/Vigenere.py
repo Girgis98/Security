@@ -50,8 +50,8 @@ def Vigenere(text, key, mode):  # mode : true auto , false repeating
 
 
 # testing
-'''
-out = Vigenere("we are discovered save yourself" , "deceptive" , False)
+''
+out = Vigenere("mdampuaf" , "aether" , True)
 print(out)
-'''
+''
 
