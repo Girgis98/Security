@@ -120,18 +120,6 @@ def matrix_to_bytes(matrix):
 def xor_bytes(a, b):
     return bytes(i ^ j for i, j in zip(a, b))
 
-
-def increment_bytes(a):
-    out = list(a)
-    for i in reversed(range(len(out))):
-        if out[i] == 0xFF:
-            out[i] = 0
-        else:
-            out[i] += 1
-            break
-    return bytes(out)
-
-
 class AES:
 
     def __init__(self, key):
