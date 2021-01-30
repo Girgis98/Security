@@ -366,9 +366,8 @@ def DES(key, text, e_or_d):
 ########################################################################################################################
 # testing
 '''
-inputt = "FFFFFFFFFFFFFFFF"
-for i in range(2):
-    inputt = DES("0000000000000000", inputt, "e")
+inputt = "CE20031574D2C98F"
+for i in range(10):
+    inputt = DES("0123456789ABCDEF", inputt, "d")
     print(inputt)
 '''
-
