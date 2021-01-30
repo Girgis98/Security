@@ -250,14 +250,18 @@ def DES(key, text, e_or_d):
         for i in range(64):
             key_bin[i] = list(hex_to_bin(input_key_hex))[i]
         key_bin = key_bin.decode()
+        # print(key_bin)
 
         # first permutation 56 bits to 64 bits
         key_bin = np.reshape(key_bin, (8, 8))
         key_bin = permutation_box(key_bin, first_permutation_choice)
+        # print(key_bin)
 
         # split key into two 28 bit parts
         left_k = key_bin[0:4, :]
         right_k = key_bin[4:8, :]
+        # print(left_k)
+        # print(right_k)
 
         # 16 round key generation
         round_keys = []
@@ -265,16 +269,26 @@ def DES(key, text, e_or_d):
             # shift n bits to left according to shift table
             left_k = shift(left_k, shift_table[i])
             right_k = shift(right_k, shift_table[i])
+            # print("first shift")
+            # print(left_k)
+            # print(right_k)
 
             # combine left and right parts
             combined_k = np.concatenate((left_k, right_k))
+            # print("combined")
+            # print(combined_k)
 
             # second permutation choice , compress key 56 bits to 48 bits
             round_key = permutation_box(combined_k, second_permutation_choice)
-
+            # print("round_key")
+            # print(round_key)
             round_keys.append(round_key)
 
+        # print("round keys")
+        # print(round_keys)
         return round_keys
+
+    # k_generation(key)
 
     ####################################################################################################################
     # Encryption Algorithm (also the decryption algorithm if the round keys are inverted)
@@ -288,19 +302,23 @@ def DES(key, text, e_or_d):
 
         # initial text permutation
         txt_bin = permutation_box(txt_bin, initial_perm)
+        print(txt_bin)
 
         # split text into two 32 bit parts
         left_txt = txt_bin[0:4, :]
         right_txt = txt_bin[4:8, :]
+        print("left\n", left_txt, "\nright\n", right_txt)
 
         # 16 round encryption
         for i in range(16):
             # right text expanded
             right_txt_exp = permutation_box(right_txt, expansion_table)
             right_txt_exp = np.reshape(right_txt_exp, (8, 6))
+            print("expansion result\n", right_txt_exp)
 
             # xor round key with right text expanded
             right_xor_key_result = xor_mat(round_keys[i], right_txt_exp)
+            print("xor result\n", right_xor_key_result)
 
             # s-box
             sbox_str = ""
@@ -322,6 +340,7 @@ def DES(key, text, e_or_d):
                 right_sbox_res_mat[l] = right_sbox_ls[l]
             right_sbox_res_mat = right_sbox_res_mat.decode().astype(int)
             right_sbox_res_mat = np.reshape(right_sbox_res_mat, (8, 4))
+            print("\ns-box\n", right_sbox_res_mat)
 
             # permutation
             right_perm = permutation_box(right_sbox_res_mat, per)
@@ -335,7 +354,7 @@ def DES(key, text, e_or_d):
             # swap left and right
             if (i != 15):
                 left_txt, right_txt = right_txt, left_txt
-
+                print("\nleft:\n", left_txt, "\nright:\n", right_txt)
         # combine
         left_flat = left_txt.flatten()
         right_flat = right_txt.flatten()
@@ -347,7 +366,7 @@ def DES(key, text, e_or_d):
         c = cipher_txt.flatten()
         s = str(c).replace(" ", "").replace("\n", "").replace("[", "").replace("]", "")
         cipher_txt_hex = bin_to_hex(s)
-
+        print("\ncipher text:\n", bin_to_hex(s))
         return cipher_txt, cipher_txt_hex
 
     ####################################################################################################################
@@ -363,11 +382,8 @@ def DES(key, text, e_or_d):
         return plain_hex
 
 
+
+
 ########################################################################################################################
 # testing
-'''
-inputt = "CE20031574D2C98F"
-for i in range(10):
-    inputt = DES("0123456789ABCDEF", inputt, "d")
-    print(inputt)
-'''
+DES("0123456789ABCDEF", "56CC09E7CFDC4CEF", "d")
