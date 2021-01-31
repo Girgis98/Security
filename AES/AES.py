@@ -199,7 +199,7 @@ while (True):
     mode_of_operation = input("Enter e for encryption and d for decryption ")
     if mode_of_operation == "e":
         out_txt = my_aes.encrypt(text)
-        print("Cipher text : ", out_txt.hex())
+        print("Cipher text : ", str(out_txt.hex()).upper())
     elif mode_of_operation == "d":
         out_txt = my_aes.decrypt(text)
-        print("Plain text : ", out_txt.hex())
+        print("Plain text : ", str(out_txt.hex()).upper())
