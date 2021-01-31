@@ -365,12 +365,6 @@ def DES(key, text, e_or_d):
 
 ########################################################################################################################
 # testing
-'''
-inputt = "FFFFFFFFFFFFFFFF"
-for i in range(2):
-    inputt = DES("0000000000000000", inputt, "e")
-    print(inputt)
-'''
 
 while (True):
     key = input("Input 16 hexadecimal key characters : ")
