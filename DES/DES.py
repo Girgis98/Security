@@ -372,3 +372,16 @@ for i in range(2):
     print(inputt)
 '''
 
+while (True):
+    key = input("Input 16 hexadecimal key characters : ")
+    text = input("Input 16 hexadecimal text characters : ")
+    number_of_rounds = int(input("Input number of times to run the algorithm : "))
+    mode_of_operation = input("Enter e for encryption and d for decryption ")
+    if mode_of_operation == "e":
+        for n in range(number_of_rounds):
+            text = DES(key, text, "e")
+        print("Cipher text : ", text)
+    elif mode_of_operation == "d":
+        for n in range(number_of_rounds):
+            text = DES(key, text, "d")
+        print("Plain text : ", text)
