@@ -35,7 +35,7 @@ inv_s_box = (
     0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
     0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,
 )
-R = (
+RC = (
     0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40,
     0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A,
     0x2F, 0x5E, 0xBC, 0x63, 0xC6, 0x97, 0x35, 0x6A,
@@ -141,7 +141,7 @@ class AES:
                 word.append(word.pop(0))
 
                 word = [s_box[b] for b in word]
-                word[0] ^= R[i]
+                word[0] ^= RC[i]
                 i += 1
             elif len(master_key) == 32 and len(key_columns) % iteration_size == 4:
                 word = [s_box[b] for b in word]
@@ -192,10 +192,14 @@ class AES:
         return matrix_to_bytes(cipher_state)
 
 
-while (1):
-    key = input("Enter a 32 hexadecimal key : ")
-    aes = AES(bytearray.fromhex(key))
-    message = bytearray.fromhex(input("Enter a 32 plaintext word : "))
-    ciphertext = aes.encrypt(message)
-    print("Cipher : ", ciphertext.hex())
-    print("Decipher : ", aes.decrypt(ciphertext).hex())
+while (True):
+    key = input("Input 32 hexadecimal key characters : ")
+    my_aes = AES(bytearray.fromhex(key))
+    text = bytearray.fromhex(input("Input 32 hexadecimal text characters : "))
+    mode_of_operation = input("Enter e for encryption and d for decryption ")
+    if mode_of_operation == "e":
+        out_txt = my_aes.encrypt(text)
+        print("Cipher text : ", out_txt.hex())
+    elif mode_of_operation == "d":
+        out_txt = my_aes.decrypt(text)
+        print("Plain text : ", out_txt.hex())
