@@ -2,6 +2,9 @@
   <dictionary name="Girgis">
     <words>
       <w>abcdef</w>
+      <w>playfair</w>
+      <w>vernam</w>
+      <w>vigenere</w>
     </words>
   </dictionary>
 </component>

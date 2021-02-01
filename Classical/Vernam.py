@@ -1,9 +1,9 @@
 import numpy as np
 from math import *
+from read_and_save import *
 
 
 def Vernam(text, key):
-
     dic2 = {
         "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7, "i": 8, "j": 9, "k": 10, "l": 11,
         "m": 12, "n": 13, "o": 14, "p": 15, "q": 16, "r": 17, "s": 18, "t": 19, "u": 20, "v": 21, "w": 22, "x": 23,
@@ -19,9 +19,8 @@ def Vernam(text, key):
     key = key.lower()
 
     # remove whitespaces
-    text = text.replace(" ", "")
-    key = key.replace(" ", "")
-
+    text = text.replace(" ", "").replace("\n", "")
+    key = key.replace(" ", "").replace("\n", "")
 
     # convert to numbers
     text_ls = []
@@ -49,3 +48,8 @@ out = Vernam("RAMSWARUPK" , "RANCHOBABA")
 print(out)
 '''
 
+delete_file_content("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vernam/vernam_cipher.txt")
+for line in read("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vernam/vernam_plain.txt"):
+    out = Vernam(line, "SPARTANS")
+    print(out)
+    write("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vernam/vernam_cipher.txt", out)

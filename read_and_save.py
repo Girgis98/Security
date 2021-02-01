@@ -10,7 +10,12 @@ def read(path):
 
 def write(path, output):
     file1 = open(path, "a")
-    file1.write(output)
+    file1.write(output + "\n")
     file1.close()
     return 1
 
+def delete_file_content(path):
+    file1 = open(path, "w")
+    file1.write("")
+    file1.close()
+    return 1

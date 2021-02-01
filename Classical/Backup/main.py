@@ -274,6 +274,15 @@ while (True):
     vig_mode = bool(input("Please Enter Vigenere mode : "))
     ver_key = input("Please Enter Vernam key : ")
 
+    # PL_text = "Hello"
+    # c_key = int("2")
+    # h_size = int("2")
+    # h_key_str = ("5 17,8 3")
+    # p_key = ("rats")
+    # vig_key = ("pie")
+    # vig_mode = bool("True")
+    # ver_key = ("SPARTANS")
+
     # input hill cipher key
     h_key = []
     h_temp = []

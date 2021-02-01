@@ -1,5 +1,6 @@
 import numpy as np
 from math import *
+from read_and_save import *
 
 
 def Vigenere(text, key, mode):  # mode : true auto , false repeating
@@ -19,12 +20,12 @@ def Vigenere(text, key, mode):  # mode : true auto , false repeating
     key = key.lower()
 
     # remove whitespaces
-    text = text.replace(" ", "")
-    key = key.replace(" ", "")
+    text = text.replace(" ", "").replace("\n", "")
+    key = key.replace(" ", "").replace("\n", "")
 
     # complete key
-    for i in range(len(text)-len(key)):
-        if mode:       # auto
+    for i in range(len(text) - len(key)):
+        if mode:  # auto
             key = key + text[i]
         elif not mode:  # repeat
             key = key + key[i]
@@ -50,8 +51,20 @@ def Vigenere(text, key, mode):  # mode : true auto , false repeating
 
 
 # testing
-''
-out = Vigenere("mdampuaf" , "aether" , True)
+'''
+out = Vigenere("mdampuaf", "aether", True)
 print(out)
-''
+'''
 
+delete_file_content("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_cipher_repeating.txt")
+for line in read("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_plain.txt"):
+    out = Vigenere(line, "pie",False)
+    print(out)
+    write("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_cipher_repeating.txt", out)
+
+
+delete_file_content("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_cipher_auto.txt")
+for line in read("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_plain.txt"):
+    out = Vigenere(line, "aether",True)
+    print(out)
+    write("D:\Desktop\To Do\security\Projects\Classical\Input Files\Vigenere/vigenere_cipher_auto.txt", out)

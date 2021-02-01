@@ -1,5 +1,6 @@
 import numpy as np
 from math import *
+from read_and_save import *
 
 
 def Hill(text, key):
@@ -19,7 +20,7 @@ def Hill(text, key):
     key = np.array(key)
 
     # remove whitespaces
-    text = text.replace(" ", "")
+    text = text.replace(" ", "").replace("\n", "")
 
     # add x to end
     while (len(text)) % np.shape(key)[0] > 0:
@@ -32,7 +33,7 @@ def Hill(text, key):
     text_arr = np.reshape(text_arr, (-1, (np.shape(key)[0])))
     # print(text,text_arr)
 
-    out = np.mod(np.dot(key,text_arr.T), 26).astype(int)
+    out = np.mod(np.dot(key, text_arr.T), 26).astype(int)
     out = out.T
     out = np.reshape(out, (-1, 1))
     out_ls = out.astype(list)
@@ -44,9 +45,6 @@ def Hill(text, key):
     return out_str
 
 
-
-
-
 # testing
 '''
 out = Hill("short example", [[7, 8], [11, 11]])
@@ -55,3 +53,16 @@ print(out)
 x = input("key matrix\n")
 print(np.array(x))
 '''
+
+delete_file_content("Input Files\Hill\hill_cipher_3x3.txt")
+for line in read("Input Files\Hill\hill_plain_3x3.txt"):
+    out = Hill(line, [[2, 4, 12], [9, 1, 6], [7, 5, 3]])
+    print(out)
+    write("Input Files\Hill\hill_cipher_3x3.txt", out)
+
+
+delete_file_content("Input Files\Hill\hill_cipher_2x2.txt")
+for line in read("Input Files\Hill\hill_plain_2x2.txt"):
+    out = Hill(line, [[5, 17], [8, 3]])
+    print(out)
+    write("Input Files\Hill\hill_cipher_2x2.txt", out)

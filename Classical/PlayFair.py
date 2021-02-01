@@ -1,5 +1,6 @@
 import numpy as np
 from math import *
+from read_and_save import *
 
 
 def play_fair(text, key):
@@ -14,8 +15,8 @@ def play_fair(text, key):
     key = key.lower()
 
     # remove whitespaces
-    text = text.replace(" ", "")
-    key = key.replace(" ", "")
+    text = text.replace(" ", "").replace("\n", "")
+    key = key.replace(" ", "").replace("\n", "")
 
     # replace j with i
     text = text.replace("j", "i")
@@ -103,14 +104,20 @@ def play_fair(text, key):
     return out
 
 
-
-
-
-
-
 # testing
-''
+'''
 o = play_fair("hello world", "charles")
 print(o)
-''
+'''
 
+delete_file_content("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_cipher_rats.txt")
+for line in read("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_plain.txt"):
+    out = play_fair(line, "rats")
+    print(out)
+    write("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_cipher_rats.txt", out)
+
+delete_file_content("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_cipher_archangel.txt")
+for line in read("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_plain.txt"):
+    out = play_fair(line, "archangel")
+    print(out)
+    write("D:\Desktop\To Do\security\Projects\Classical\Input Files\PlayFair\playfair_cipher_archangel.txt", out)
